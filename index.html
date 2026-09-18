@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gerador de Anúncio — Gois Transportes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Asap+Condensed:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Asap:ital,wght@0,100..900;1,100..900&family=Exo+2:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --red:#B81821;
+    --dark:#2b2b2b;
+    --bg:#f2f3f5;
+    --card:#ffffff;
+    --border:#e3e5e9;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Exo 2',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:var(--bg);
+    color:var(--dark);
+    min-height:100vh;
+  }
+  .wrap{
+    display:flex;
+    flex-wrap:wrap;
+    gap:32px;
+    max-width:1200px;
+    margin:0 auto;
+    padding:32px 24px 60px;
+    align-items:flex-start;
+  }
+  .panel{
+    flex:1 1 380px;
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:28px;
+  }
+  h1{
+    font-size:22px;
+    margin:0 0 4px;
+    font-weight:700;
+  }
+  .subtitle{
+    color:#777;
+    font-size:14px;
+    margin:0 0 24px;
+  }
+  label{
+    display:block;
+    font-size:13px;
+    font-weight:600;
+    margin:16px 0 6px;
+    color:#444;
+  }
+  label .opt{
+    font-weight:400;
+    color:#999;
+  }
+  input[type=text], input[type=date]{
+    width:100%;
+    padding:11px 13px;
+    border:1.5px solid var(--border);
+    border-radius:9px;
+    font-size:15px;
+    font-family:inherit;
+    outline:none;
+    transition:border-color .15s;
+    background:#fafafa;
+    color:#222;
+  }
+  input[type=text]:focus, input[type=date]:focus{
+    border-color:var(--red);
+    background:#fff;
+  }
+  select{
+    width:100%;
+    padding:11px 13px;
+    border:1.5px solid var(--border);
+    border-radius:9px;
+    font-size:15px;
+    font-family:inherit;
+    outline:none;
+    background:#fafafa;
+    color:#222;
+    appearance:none;
+    -webkit-appearance:none;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2.5'><polyline points='6 9 12 15 18 9'/></svg>");
+    background-repeat:no-repeat;
+    background-position:right 13px center;
+  }
+  select:focus{
+    border-color:var(--red);
+    background-color:#fff;
+  }
+  input[readonly]{
+    background:#f0f0f0;
+    color:#555;
+  }
+  .checkbox-group{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px 14px;
+    padding:12px 13px;
+    border:1.5px solid var(--border);
+    border-radius:9px;
+    background:#fafafa;
+  }
+  .checkbox-item{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    font-size:14px;
+    font-weight:400;
+    margin:0;
+    cursor:pointer;
+    color:#333;
+  }
+  .checkbox-item input{
+    width:16px;
+    height:16px;
+    accent-color:var(--red);
+    cursor:pointer;
+  }
+  .btn{
+    margin-top:26px;
+    width:100%;
+    padding:14px;
+    background:var(--red);
+    color:#fff;
+    border:none;
+    border-radius:10px;
+    font-size:16px;
+    font-weight:700;
+    font-family:inherit;
+    cursor:pointer;
+    transition:filter .15s;
+  }
+  .btn:hover{filter:brightness(1.08);}
+  .btn:active{filter:brightness(0.95);}
+  .btn.secondary{
+    margin-top:10px;
+    background:#fff;
+    color:var(--red);
+    border:1.5px solid var(--red);
+  }
+  .preview-col{
+    flex:1 1 340px;
+    position:sticky;
+    top:24px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+  }
+  .canvas-shell{
+    background:#111;
+    border-radius:18px;
+    padding:10px;
+    box-shadow:0 10px 30px rgba(0,0,0,.15);
+  }
+  canvas{
+    display:block;
+    width:100%;
+    max-width:300px;
+    height:auto;
+    border-radius:10px;
+  }
+  .hint{
+    font-size:12px;
+    color:#999;
+    margin-top:14px;
+    text-align:center;
+    max-width:300px;
+  }
+  .footer-note{
+    font-size:12px;
+    color:#aaa;
+    margin-top:22px;
+    line-height:1.5;
+  }
+  .ios-tip{
+    display:none;
+    margin-top:16px;
+    padding:12px 14px;
+    background:#fff7e6;
+    border:1.5px solid #f0c36d;
+    border-radius:10px;
+    font-size:13px;
+    line-height:1.5;
+    color:#6b4e00;
+  }
+  .row2{
+    display:flex;
+    gap:12px;
+  }
+  .row2 > div{flex:1;}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="panel">
+    <h1>Gerador de Anúncio de Carga</h1>
+    <p class="subtitle">Preencha os campos e baixe a imagem pronta para WhatsApp/Instagram.</p>
+
+    <label>Veículo <span class="opt">(selecione um ou mais)</span></label>
+    <div class="checkbox-group" id="veiculoGroup">
+      <label class="checkbox-item"><input type="checkbox" name="veiculo" value="Truck"> Truck</label>
+      <label class="checkbox-item"><input type="checkbox" name="veiculo" value="Bitruck"> Bitruck</label>
+      <label class="checkbox-item"><input type="checkbox" name="veiculo" value="Carreta"> Carreta</label>
+      <label class="checkbox-item"><input type="checkbox" name="veiculo" value="Carreta Baú" checked> Carreta Baú</label>
+      <label class="checkbox-item"><input type="checkbox" name="veiculo" value="Carreta Sider"> Carreta Sider</label>
+      <label class="checkbox-item"><input type="checkbox" name="veiculo" value="Carreta Graneleira"> Carreta Graneleira</label>
+    </div>
+
+    <div class="row2">
+      <div>
+        <label for="origem">Origem</label>
+        <input type="text" id="origem" value="Mococa – SP" maxlength="90">
+      </div>
+      <div>
+        <label for="destino">Destino</label>
+        <input type="text" id="destino" value="São Bernardo do Campo – SP" maxlength="120">
+      </div>
+    </div>
+
+    <label for="agenda">Agenda</label>
+    <input type="date" id="agenda" value="2026-09-17">
+
+    <div class="row2">
+      <div>
+        <label for="responsavel">Responsável</label>
+        <select id="responsavel"></select>
+      </div>
+      <div>
+        <label for="telefone">Telefone <span class="opt">(automático)</span></label>
+        <input type="text" id="telefone" value="" maxlength="25">
+      </div>
+    </div>
+
+    <button class="btn" id="downloadBtn">Baixar imagem PNG</button>
+    <button class="btn secondary" id="shareBtn" style="display:none;">Compartilhar (WhatsApp, etc.)</button>
+    <button class="btn secondary" id="copyBtn">Copiar imagem</button>
+
+    <p class="ios-tip" id="iosTip">📱 <strong>iPhone:</strong> se o botão "Compartilhar" não aparecer aqui em cima, você provavelmente está numa pré-visualização rápida do arquivo, não no Safari de verdade. Toque no ícone de compartilhar do iOS (fora desta página) e escolha <strong>"Safari"</strong> para abrir esta página numa aba normal — aí os botões funcionam.</p>
+
+    <p class="footer-note">Este gerador roda 100% no seu computador — nada é enviado para a internet (apenas a fonte Exo 2 é carregada do Google Fonts na primeira vez que a página abre). No celular, use o botão "Compartilhar" para enviar direto pelo WhatsApp — é mais confiável do que "Copiar". Se abrir o arquivo pelo visualizador do WhatsApp (ícone de anexo), o "Copiar" pode ser bloqueado pelo sistema; baixe/abra o arquivo direto no navegador para evitar isso.</p>
+  </div>
+
+  <div class="preview-col">
+    <div class="canvas-shell">
+      <canvas id="cv" width="1080" height="1920"></canvas>
+    </div>
+    <p class="hint">Pré-visualização em tempo real. A imagem baixada sai em alta resolução (1080×1920), ideal para Status do WhatsApp e Stories.</p>
+  </div>
+</div>
+
+<script>
+const ASSETS = {"bg": "assets/bg.jpg", "truck": "assets/truck.png", "origin": "assets/origin.png", "dest": "assets/dest.png", "agenda": "assets/agenda.png", "phone": "assets/phone.png"};
+
+const canvas = document.getElementById('cv');
+const ctx = canvas.getContext('2d');
+
+const RED = '#B81821';
+const DARK = '#343434';
+const FONT_FAMILY = "'Exo 2', Arial, Helvetica, sans-serif";
+
+const images = {};
+let loadedCount = 0;
+const keys = Object.keys(ASSETS);
+let imagesReady = false;
+let fontsReady = false;
+
+function maybeRender(){
+  if(imagesReady && fontsReady) render();
+}
+
+function loadImages(){
+  keys.forEach(k=>{
+    const img = new Image();
+    img.onload = ()=>{
+      loadedCount++;
+      if(loadedCount === keys.length){
+        imagesReady = true;
+        maybeRender();
+      }
+    };
+    img.src = ASSETS[k];
+    images[k] = img;
+  });
+}
+
+function loadFonts(){
+  const weights = [400, 600, 700, 800];
+  const sizes = [26, 32, 40, 46, 52, 58, 64];
+  const jobs = [];
+  weights.forEach(w=>{
+    sizes.forEach(s=>{
+      jobs.push(document.fonts.load(`${w} ${s}px "Exo 2"`));
+    });
+  });
+  Promise.all(jobs).then(()=>{
+    fontsReady = true;
+    maybeRender();
+  }).catch(()=>{
+    // segue mesmo se alguma variação falhar ao carregar
+    fontsReady = true;
+    maybeRender();
+  });
+}
+
+// ---- Layout base (canvas 1080x1920) ----
+const LEFT_ICON_X = 68;
+const ICON_SIZE = 92;
+const TEXT_X = 195;
+const RIGHT_MAX_X = 1015;
+const PHONE_ROW_MAX_X = 690; // evita sobrepor a logo já embutida no fundo
+
+const PHOTO_BOTTOM = 671;      // fim da foto de fundo
+const TOP_PAD = 4;             // respiro entre o topo do bloco e o ícone/título
+const VALUE_GAP_RATIO = 0.95;  // rótulo -> 1ª linha do valor (espaço reduzido, sem sobrepor)
+const LINE_HEIGHT_RATIO = 1.10;// espaço entre linhas do valor quando quebra em 2 linhas
+const VALUE_BASE_FONT = 87;    // fonte dos campos dinâmicos (58 + 50%)
+const VALUE_MIN_FONT = 54;     // piso de redução caso o conteúdo não caiba
+const PHONE_TOP = 1616;        // posição fixa (alinhada com a logo embutida no fundo)
+const BUDGET = PHONE_TOP - PHOTO_BOTTOM; // orçamento fixo para os 4 campos dinâmicos
+const LABEL_FONT_SIZE = 32;
+
+// Alinhamento fixo do bloco "telefone" com a logo (centro da logo ≈ y 1794)
+const PHONE_CENTER_Y = 1794;
+const PHONE_VALUE_GAP_RATIO = 1.05; // espaço reduzido entre "Fale com..." e o número, sem sobrepor
+
+function measureWrap(text, fontSize, maxWidth, maxLines){
+  const font = `700 ${fontSize}px ${FONT_FAMILY}`;
+  ctx.font = font;
+  const words = String(text).split(' ');
+  let lines = [];
+  let current = '';
+  for(let w of words){
+    const test = current ? current + ' ' + w : w;
+    if(ctx.measureText(test).width > maxWidth && current){
+      lines.push(current);
+      current = w;
+    } else {
+      current = test;
+    }
+  }
+  if(current) lines.push(current);
+  if(lines.length === 0) lines = [''];
+  if(lines.length > maxLines){
+    lines = lines.slice(0, maxLines);
+    let last = lines[maxLines-1];
+    while(ctx.measureText(last + '...').width > maxWidth && last.length > 1){
+      last = last.slice(0, -1);
+    }
+    lines[maxLines-1] = last + '...';
+  }
+  return lines;
+}
+
+function spacedLabel(text){
+  return String(text).toUpperCase().split('').join('\u200a\u200a');
+}
+
+function measureAscent(text, font){
+  ctx.font = font;
+  const m = ctx.measureText(text);
+  return m.actualBoundingBoxAscent || font.match(/(\d+)px/)[1]*0.73;
+}
+
+function measureDescent(text, font){
+  ctx.font = font;
+  const m = ctx.measureText(text);
+  return m.actualBoundingBoxDescent || font.match(/(\d+)px/)[1]*0.22;
+}
+
+function contentHeight(labelAscent, valueDescent, lines, fontSize){
+  const valueGap = fontSize * VALUE_GAP_RATIO;
+  const lineHeight = fontSize * LINE_HEIGHT_RATIO;
+  const textBottom = TOP_PAD + labelAscent + valueGap + (lines-1) * lineHeight + valueDescent;
+  const iconBottom = TOP_PAD + ICON_SIZE;
+  return Math.max(textBottom, iconBottom);
+}
+
+function computeLayout(values){
+  const fields = ['veiculo','origem','destino','agenda'];
+  const maxWidth = RIGHT_MAX_X - TEXT_X;
+  let fontSize = VALUE_BASE_FONT;
+  let wraps, total, labelAscents, valueDescents;
+
+  while(true){
+    wraps = fields.map(f => measureWrap(values[f], fontSize, maxWidth, 2));
+    labelAscents = fields.map(f => measureAscent(spacedLabel(LABELS[f]), `700 ${LABEL_FONT_SIZE}px ${FONT_FAMILY}`));
+    valueDescents = wraps.map(lines => measureDescent(lines[lines.length-1], `700 ${fontSize}px ${FONT_FAMILY}`));
+    total = wraps.reduce((sum, lines, i) => sum + contentHeight(labelAscents[i], valueDescents[i], lines.length, fontSize), 0);
+    if(total <= BUDGET || fontSize <= VALUE_MIN_FONT) break;
+    fontSize -= 2;
+  }
+
+  // distribui o espaço restante entre as 4 linhas para sempre preencher
+  // o orçamento fixo (o rodapé com o telefone fica alinhado à logo);
+  // metade fica antes da divisória (centralizando-a) e metade depois
+  const extra = Math.max(0, (BUDGET - total) / fields.length);
+
+  const rows = [];
+  let top = PHOTO_BOTTOM;
+  fields.forEach((f, i)=>{
+    const lines = wraps[i];
+    const h = contentHeight(labelAscents[i], valueDescents[i], lines.length, fontSize);
+    const dividerY = top + h + extra/2;
+    const bottom = top + h + extra;
+    rows.push({field: f, top, iconTop: top + TOP_PAD, labelAscent: labelAscents[i], dividerY, bottom, lines, fontSize});
+    top = bottom;
+  });
+
+  return {rows, fontSize};
+}
+
+function fitSingleLine(text, baseSize, maxWidth, minSize=34){
+  let size = baseSize;
+  const font = (s)=> `700 ${s}px ${FONT_FAMILY}`;
+  ctx.font = font(size);
+  while(ctx.measureText(text).width > maxWidth && size > minSize){
+    size -= 2;
+    ctx.font = font(size);
+  }
+  return size;
+}
+
+function drawLabel(text, x, baselineY, maxWidth){
+  const spaced = String(text).toUpperCase().split('').join('\u200a\u200a');
+  let size = 32;
+  ctx.font = `700 ${size}px ${FONT_FAMILY}`;
+  while(ctx.measureText(spaced).width > maxWidth && size > 18){
+    size -= 1;
+    ctx.font = `700 ${size}px ${FONT_FAMILY}`;
+  }
+  ctx.fillStyle = RED;
+  ctx.textBaseline = 'alphabetic';
+  ctx.fillText(spaced, x, baselineY);
+}
+
+function drawValueLines(lines, x, firstBaselineY, fontSize){
+  const lineHeight = fontSize * LINE_HEIGHT_RATIO;
+  ctx.font = `700 ${fontSize}px ${FONT_FAMILY}`;
+  ctx.fillStyle = DARK;
+  ctx.textBaseline = 'alphabetic';
+  lines.forEach((line, i)=>{
+    ctx.fillText(line, x, firstBaselineY + i*lineHeight);
+  });
+}
+
+function drawDivider(y){
+  ctx.fillStyle = RED;
+  ctx.fillRect(65, y-1.5, RIGHT_MAX_X-65, 3);
+}
+
+function drawIcon(imgKey, topY){
+  const img = images[imgKey];
+  if(!img || !img.complete) return;
+  const ratio = img.naturalWidth / img.naturalHeight;
+  let w = ICON_SIZE, h = ICON_SIZE;
+  if(ratio > 1){ h = ICON_SIZE / ratio; } else { w = ICON_SIZE * ratio; }
+  const x = LEFT_ICON_X + (ICON_SIZE - w)/2;
+  ctx.drawImage(img, x, topY, w, h);
+}
+
+const ICONS = {veiculo:'truck', origem:'origin', destino:'dest', agenda:'agenda'};
+const LABELS = {veiculo:'Veículo', origem:'Origem', destino:'Destino', agenda:'Agenda'};
+
+// Lista de responsáveis e telefones (planilha responsaveis.xlsx)
+const RESPONSAVEIS = {
+  'Ana Carla': '79 99676-5687',
+  'Cleverton': '79 99676-5687',
+  'Daniela': '79 99863-8482',
+  'Franciele': '79 99905-6356',
+  'Gabriel': '79 99699-3081',
+  'João Marcos': '79 99806-6173',
+  'Julio Reis': '79 99831-9331',
+  'Phelipe': '79 99648-5087',
+  'Reinan': '79 99686-6690',
+  'Simone': '79 99918-2469',
+  'Vitor': '79 99662-2631'
+};
+
+function getVeiculoValue(){
+  const checked = Array.from(document.querySelectorAll('#veiculoGroup input[type=checkbox]:checked'));
+  return checked.map(cb => cb.value).join(', ');
+}
+
+// Converte a data escolhida (AAAA-MM-DD) para o formato exibido no anúncio, ex: "17/09"
+function formatAgendaDisplay(isoDate){
+  if(!isoDate) return '';
+  const partes = isoDate.split('-');
+  if(partes.length !== 3) return isoDate;
+  const dia = parseInt(partes[2], 10);
+  const mes = parseInt(partes[1], 10);
+  if(isNaN(dia) || isNaN(mes) || mes < 1 || mes > 12) return isoDate;
+  const diaStr = String(dia).padStart(2, '0');
+  const mesStr = String(mes).padStart(2, '0');
+  return `${diaStr}/${mesStr}`;
+}
+
+function render(){
+  const values = {
+    veiculo: getVeiculoValue() || ' ',
+    origem: document.getElementById('origem').value || ' ',
+    destino: document.getElementById('destino').value || ' ',
+    agenda: formatAgendaDisplay(document.getElementById('agenda').value) || ' ',
+    responsavel: document.getElementById('responsavel').value || ' ',
+    telefone: document.getElementById('telefone').value || ' '
+  };
+
+  ctx.clearRect(0,0,canvas.width, canvas.height);
+  ctx.drawImage(images.bg, 0, 0, canvas.width, canvas.height);
+
+  const {rows, fontSize} = computeLayout(values);
+
+  rows.forEach(row=>{
+    const labelBaseline = row.iconTop + row.labelAscent;
+    const valueBaseline = labelBaseline + row.fontSize * VALUE_GAP_RATIO;
+    drawIcon(ICONS[row.field], row.iconTop);
+    drawLabel(LABELS[row.field], TEXT_X, labelBaseline, RIGHT_MAX_X - TEXT_X);
+    drawValueLines(row.lines, TEXT_X, valueBaseline, fontSize);
+    drawDivider(row.dividerY);
+  });
+
+  // Linha final: Fale com {responsável} + telefone — posição fixa, alinhada à logo do fundo
+  const phoneIconH = (()=>{ const img = images.phone; const r = img.naturalWidth/img.naturalHeight; return r>1 ? ICON_SIZE/r : ICON_SIZE; })();
+  const phoneIconTop = PHONE_CENTER_Y - phoneIconH/2;
+  const phoneLabelAscent = measureAscent(spacedLabel('Fale com ' + values.responsavel), `700 ${LABEL_FONT_SIZE}px ${FONT_FAMILY}`);
+  const phoneLabelBaseline = phoneIconTop + phoneLabelAscent;
+  drawIcon('phone', phoneIconTop);
+  drawLabel('Fale com ' + values.responsavel, TEXT_X, phoneLabelBaseline, PHONE_ROW_MAX_X - TEXT_X);
+  const phoneSize = fitSingleLine(values.telefone, 58, PHONE_ROW_MAX_X - TEXT_X, 34);
+  const phoneValueBaseline = phoneLabelBaseline + phoneSize * PHONE_VALUE_GAP_RATIO;
+  drawValueLines([values.telefone], TEXT_X, phoneValueBaseline, phoneSize);
+
+  updateShareCache();
+}
+
+// Preenche o <select> de responsáveis a partir da lista acima e liga o
+// telefone automaticamente quando o nome selecionado muda.
+(function setupResponsavelSelect(){
+  const sel = document.getElementById('responsavel');
+  const placeholder = document.createElement('option');
+  placeholder.value = '';
+  placeholder.textContent = 'Selecione...';
+  sel.appendChild(placeholder);
+  Object.keys(RESPONSAVEIS).forEach(name=>{
+    const opt = document.createElement('option');
+    opt.value = name;
+    opt.textContent = name;
+    sel.appendChild(opt);
+  });
+  sel.value = 'Daniela'; // valor inicial de exemplo para a pré-visualização
+  document.getElementById('telefone').value = RESPONSAVEIS[sel.value] || '';
+
+  sel.addEventListener('change', ()=>{
+    document.getElementById('telefone').value = RESPONSAVEIS[sel.value] || '';
+    maybeRender();
+  });
+})();
+
+['origem','destino','agenda','telefone'].forEach(id=>{
+  document.getElementById(id).addEventListener('input', maybeRender);
+});
+document.querySelectorAll('#veiculoGroup input[type=checkbox]').forEach(cb=>{
+  cb.addEventListener('change', maybeRender);
+});
+
+function currentFilename(){
+  const destino = (document.getElementById('destino').value || 'anuncio').trim().replace(/[^a-zA-Z0-9]+/g,'-');
+  return `anuncio-${destino || 'carga'}.png`;
+}
+
+// O iOS Safari só permite navigator.share() quando chamado de forma síncrona
+// dentro do clique do usuário — qualquer "await" antes da chamada cancela a
+// permissão. Por isso mantemos um arquivo pronto em cache, atualizado sempre
+// que o desenho muda, para que o clique apenas dispare o compartilhamento.
+let shareCache = null; // { file, forFilename }
+
+function updateShareCache(){
+  if(!navigator.share) return;
+  const filename = currentFilename();
+  canvas.toBlob((blob)=>{
+    if(!blob) return;
+    shareCache = { file: new File([blob], filename, {type: 'image/png'}), forFilename: filename };
+  }, 'image/png');
+}
+
+// Mostra o botão "Compartilhar" apenas quando o navegador suporta
+// compartilhar arquivos nativamente (comum no Chrome Android e Safari iOS).
+(function setupShareButton(){
+  if(navigator.share){
+    document.getElementById('shareBtn').style.display = 'block';
+  } else {
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    if(isIOS){
+      document.getElementById('iosTip').style.display = 'block';
+    }
+  }
+})();
+
+document.getElementById('shareBtn').addEventListener('click', ()=>{
+  if(!shareCache){
+    alert('A imagem ainda está sendo preparada, tente novamente em um instante.');
+    updateShareCache();
+    return;
+  }
+  const file = shareCache.file;
+  if(navigator.canShare && !navigator.canShare({files: [file]})){
+    alert('Seu navegador não suporta compartilhar esta imagem diretamente. Use "Baixar imagem PNG" e anexe o arquivo manualmente.');
+    return;
+  }
+  // Chamada síncrona (sem await antes dela) — obrigatório no iOS Safari.
+  navigator.share({files: [file], title: 'Anúncio de carga'}).catch((e)=>{
+    if(e && e.name === 'AbortError') return; // usuário cancelou o compartilhamento
+    console.error('Falha ao compartilhar:', e);
+    alert('Não foi possível compartilhar automaticamente. Use "Baixar imagem PNG" e anexe o arquivo manualmente.');
+  });
+});
+
+document.getElementById('downloadBtn').addEventListener('click', ()=>{
+  const destino = (document.getElementById('destino').value || 'anuncio').trim().replace(/[^a-zA-Z0-9]+/g,'-');
+  const filename = `anuncio-${destino || 'carga'}.png`;
+
+  canvas.toBlob((blob)=>{
+    if(!blob){
+      alert('Não foi possível gerar a imagem. Tente novamente.');
+      return;
+    }
+    try{
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      setTimeout(()=>URL.revokeObjectURL(url), 2000);
+    }catch(e){
+      // Fallback: abre a imagem em uma nova aba para o usuário salvar manualmente
+      const dataUrl = canvas.toDataURL('image/png');
+      const win = window.open();
+      if(win){
+        win.document.write('<img src="'+dataUrl+'" alt="Anúncio">');
+      } else {
+        alert('Não foi possível baixar automaticamente. Permita pop-ups ou tente novamente.');
+      }
+    }
+  }, 'image/png');
+});
+
+document.getElementById('copyBtn').addEventListener('click', ()=>{
+  if(!navigator.clipboard || typeof ClipboardItem === 'undefined'){
+    alert('Seu navegador não suporta copiar imagens diretamente. Use o botão "Baixar imagem PNG".');
+    return;
+  }
+  const btn = document.getElementById('copyBtn');
+  try{
+    // Passar uma Promise diretamente ao ClipboardItem preserva o gesto do
+    // usuário (necessário no Safari) em vez de usar await antes da chamada.
+    const item = new ClipboardItem({
+      'image/png': new Promise((resolve, reject)=>{
+        canvas.toBlob((blob)=>{
+          if(blob) resolve(blob); else reject(new Error('Falha ao gerar imagem'));
+        }, 'image/png');
+      })
+    });
+    navigator.clipboard.write([item]).then(()=>{
+      const old = btn.textContent;
+      btn.textContent = 'Copiado!';
+      setTimeout(()=>btn.textContent = old, 1500);
+    }).catch((err)=>{
+      console.error('Falha ao copiar:', err);
+      if(String(err).includes('permissions policy') || err.name === 'NotAllowedError'){
+        alert('A cópia foi bloqueada pelo navegador porque esta página está sendo vista dentro de uma pré-visualização (ex.: dentro do próprio Claude). Salve/baixe este arquivo HTML no seu computador e abra-o diretamente em uma aba do navegador (Chrome, Edge, etc.) — aí o botão "Copiar imagem" funciona normalmente. Enquanto isso, use "Baixar imagem PNG".');
+      } else {
+        alert('Não foi possível copiar automaticamente. Use o botão "Baixar imagem PNG".');
+      }
+    });
+  }catch(e){
+    console.error('Falha ao copiar:', e);
+    alert('Não foi possível copiar automaticamente. Use o botão "Baixar imagem PNG".');
+  }
+});
+
+loadImages();
+loadFonts();
+</script>
+</body>
+</html>
