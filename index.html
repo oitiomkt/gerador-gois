@@ -266,7 +266,7 @@
 </div>
 
 <script>
-const ASSETS = {"bg": "assets/bg.jpg", "truck": "assets/truck.png", "origin": "assets/origin.png", "dest": "assets/dest.png", "agenda": "assets/agenda.png", "phone": "assets/phone.png"};
+const ASSETS = {"bg": "assets/bg.jpg", "truck": "assets/truck.png", "tag": "assets/tag.svg", "origin": "assets/origin.png", "dest": "assets/dest.png", "agenda": "assets/agenda.png", "phone": "assets/phone.png"};
 
 const canvas = document.getElementById('cv');
 const ctx = canvas.getContext('2d');
@@ -480,7 +480,7 @@ function drawIcon(imgKey, topY){
   ctx.drawImage(img, x, topY, w, h);
 }
 
-const ICONS = {veiculo:'truck', tagPedagio:'truck', origem:'origin', destino:'dest', agenda:'agenda'};
+const ICONS = {veiculo:'truck', tagPedagio:'tag', origem:'origin', destino:'dest', agenda:'agenda'};
 const LABELS = {veiculo:'Veículo', tagPedagio:'Tag Pedágio', origem:'Origem', destino:'Destino', agenda:'Agenda'};
 
 // Lista de responsáveis e telefones (planilha responsaveis.xlsx)
