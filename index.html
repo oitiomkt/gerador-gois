@@ -393,7 +393,7 @@ function contentHeight(labelAscent, valueDescent, lines, fontSize){
 }
 
 function computeLayout(values){
-  const fields = ['veiculo','origem','destino','agenda'];
+  const fields = ['veiculo','tagPedagio','origem','destino','agenda'];
   const maxWidth = RIGHT_MAX_X - TEXT_X;
   let fontSize = VALUE_BASE_FONT;
   let wraps, total, labelAscents, valueDescents;
@@ -475,8 +475,8 @@ function drawIcon(imgKey, topY){
   ctx.drawImage(img, x, topY, w, h);
 }
 
-const ICONS = {veiculo:'truck', origem:'origin', destino:'dest', agenda:'agenda'};
-const LABELS = {veiculo:'Veículo', origem:'Origem', destino:'Destino', agenda:'Agenda'};
+const ICONS = {veiculo:'truck', tagPedagio:'truck', origem:'origin', destino:'dest', agenda:'agenda'};
+const LABELS = {veiculo:'Veículo', tagPedagio:'Tag Pedágio', origem:'Origem', destino:'Destino', agenda:'Agenda'};
 
 // Lista de responsáveis e telefones (planilha responsaveis.xlsx)
 const RESPONSAVEIS = {
@@ -514,6 +514,7 @@ function formatAgendaDisplay(isoDate){
 function render(){
   const values = {
     veiculo: getVeiculoValue() || ' ',
+    tagPedagio: document.getElementById('tagPedagio').value || ' ',
     origem: document.getElementById('origem').value || ' ',
     destino: document.getElementById('destino').value || ' ',
     agenda: formatAgendaDisplay(document.getElementById('agenda').value) || ' ',
@@ -578,6 +579,7 @@ function render(){
 document.querySelectorAll('#veiculoGroup input[type=checkbox]').forEach(cb=>{
   cb.addEventListener('change', maybeRender);
 });
+document.getElementById('tagPedagio').addEventListener('change', maybeRender);
 
 function currentFilename(){
   const destino = (document.getElementById('destino').value || 'anuncio').trim().replace(/[^a-zA-Z0-9]+/g,'-');
