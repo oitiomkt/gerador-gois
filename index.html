@@ -332,9 +332,9 @@ const VALUE_GAP_RATIO = 0.95;  // rótulo -> 1ª linha do valor (espaço reduzid
 const LINE_HEIGHT_RATIO = 1.10;// espaço entre linhas do valor quando quebra em 2 linhas
 const VALUE_BASE_FONT = 87;    // fonte dos campos dinâmicos (58 + 50%)
 const VALUE_MIN_FONT = 54;     // piso de redução caso o conteúdo não caiba
-const PHONE_TOP = 1616;        // posição fixa (alinhada com a logo embutida no fundo)
+const PHONE_TOP = 1710;        // limite inferior do bloco dinâmico, aproximado do rodapé (era 1616)
 const BUDGET = PHONE_TOP - PHOTO_BOTTOM; // orçamento fixo para os campos dinâmicos
-const LAST_FIELD_TAIL_RATIO = 0.15; // fração do espaço sobrando que fica ENTRE o traço do último campo e o rodapé (resto vai antes, junto ao valor)
+const LAST_FIELD_TAIL_RATIO = 0.10; // fração do espaço sobrando que fica ENTRE o traço do último campo e o rodapé (resto vai antes, junto ao valor)
 const LABEL_FONT_SIZE = 32;
 
 // Alinhamento fixo do bloco "telefone" com a logo (centro da logo ≈ y 1794)
