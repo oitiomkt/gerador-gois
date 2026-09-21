@@ -221,6 +221,7 @@
     <select id="tagPedagio">
       <option value="Todas as Tags">Todas as Tags</option>
       <option value="Apenas Sem Parar">Apenas Sem Parar</option>
+      <option value="Sem Tag">Sem Tag</option>
     </select>
 
     <div class="row2">
@@ -394,7 +395,11 @@ function contentHeight(labelAscent, valueDescent, lines, fontSize){
 }
 
 function computeLayout(values){
-  const fields = ['veiculo','tagPedagio','origem','destino','agenda'];
+  // "Sem Tag" remove a linha inteira do layout (ícone, rótulo, valor e
+  // traço), em vez de deixar o campo em branco — os demais campos passam
+  // a se distribuir no espaço todo, como se a Tag não existisse.
+  const fields = ['veiculo','tagPedagio','origem','destino','agenda']
+    .filter(f => f !== 'tagPedagio' || values.tagPedagio !== 'Sem Tag');
   const maxWidth = RIGHT_MAX_X - TEXT_X;
   let fontSize = VALUE_BASE_FONT;
   let wraps, total, labelAscents, valueDescents;
