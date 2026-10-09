@@ -239,6 +239,9 @@
 
     <label for="agenda">Agenda</label>
     <input type="date" id="agenda" value="2026-09-17">
+    <label class="checkbox-item" style="margin-top:8px;">
+      <input type="checkbox" id="embarqueImediato"> Embarque imediato
+    </label>
 
     <div class="row2">
       <div>
@@ -492,9 +495,11 @@ const LABELS = {veiculo:'Veículo', tagPedagio:'Tag Pedágio', origem:'Origem', 
 
 // Lista de responsáveis e telefones (planilha responsaveis.xlsx)
 const RESPONSAVEIS = {
-  'Ana Carla': '79 99676-5687',
+  'Ana Carla': '79 99961-9665',
   'Cleverton': '79 99676-5687',
+  'Cristiane': '79 99983-7876',
   'Daniela': '79 99863-8482',
+  'Felipe': '79 99630-1205',
   'Franciele': '79 99905-6356',
   'Gabriel': '79 99699-3081',
   'João Marcos': '79 99806-6173',
@@ -529,7 +534,9 @@ function render(){
     tagPedagio: document.getElementById('tagPedagio').value || ' ',
     origem: document.getElementById('origem').value || ' ',
     destino: document.getElementById('destino').value || ' ',
-    agenda: formatAgendaDisplay(document.getElementById('agenda').value) || ' ',
+    agenda: document.getElementById('embarqueImediato').checked
+      ? 'EMBARQUE IMEDIATO'
+      : (formatAgendaDisplay(document.getElementById('agenda').value) || ' '),
     responsavel: document.getElementById('responsavel').value || ' ',
     telefone: document.getElementById('telefone').value || ' '
   };
@@ -587,6 +594,10 @@ function render(){
 
 ['origem','destino','agenda','telefone'].forEach(id=>{
   document.getElementById(id).addEventListener('input', maybeRender);
+});
+document.getElementById('embarqueImediato').addEventListener('change', ()=>{
+  document.getElementById('agenda').disabled = document.getElementById('embarqueImediato').checked;
+  maybeRender();
 });
 document.querySelectorAll('#veiculoGroup input[type=checkbox]').forEach(cb=>{
   cb.addEventListener('change', maybeRender);
