@@ -206,6 +206,10 @@
     <h1>Gerador de Anúncio de Carga</h1>
     <p class="subtitle">Preencha os campos e baixe a imagem pronta para WhatsApp/Instagram.</p>
 
+    <label for="bgUpload">Imagem de fundo <span class="opt">(opcional)</span></label>
+    <input type="file" id="bgUpload" accept="image/*">
+    <button type="button" class="btn secondary" id="bgResetBtn" style="margin-top:8px;">Restaurar imagem padrão</button>
+
     <label>Veículo <span class="opt">(selecione um ou mais)</span></label>
     <div class="checkbox-group" id="veiculoGroup">
       <label class="checkbox-item"><input type="checkbox" name="veiculo" value="Toco"> Toco</label>
@@ -598,6 +602,28 @@ function render(){
 document.getElementById('embarqueImediato').addEventListener('change', ()=>{
   document.getElementById('agenda').disabled = document.getElementById('embarqueImediato').checked;
   maybeRender();
+});
+
+// Troca da imagem de fundo: carrega o arquivo escolhido como uma nova
+// imagem independente (não mexe no contador de carregamento inicial)
+// e re-renderiza assim que ela estiver pronta.
+document.getElementById('bgUpload').addEventListener('change', (e)=>{
+  const file = e.target.files && e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = (ev)=>{
+    const img = new Image();
+    img.onload = ()=>{ images.bg = img; maybeRender(); };
+    img.src = ev.target.result;
+  };
+  reader.readAsDataURL(file);
+});
+
+document.getElementById('bgResetBtn').addEventListener('click', ()=>{
+  document.getElementById('bgUpload').value = '';
+  const img = new Image();
+  img.onload = ()=>{ images.bg = img; maybeRender(); };
+  img.src = ASSETS.bg;
 });
 document.querySelectorAll('#veiculoGroup input[type=checkbox]').forEach(cb=>{
   cb.addEventListener('change', maybeRender);
