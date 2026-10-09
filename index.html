@@ -208,7 +208,7 @@
 
     <label for="bgSelect">Imagem de fundo</label>
     <select id="bgSelect">
-      <option value="bg">Padrão</option>
+      <option value="bgPadrao">Padrão</option>
       <option value="bgEstrada">Estrada</option>
       <option value="bgDocas">Docas (pôr do sol)</option>
       <option value="bgMascote">Mascote</option>
@@ -280,7 +280,7 @@
 </div>
 
 <script>
-const ASSETS = {"bg": "assets/bg.jpg", "bgEstrada": "assets/bg-estrada.webp", "bgDocas": "assets/bg-docas.webp", "bgMascote": "assets/bg-mascote.webp", "truck": "assets/truck.svg", "tag": "assets/tag.svg", "origin": "assets/origin.svg", "dest": "assets/dest.svg", "agenda": "assets/agenda.svg", "phone": "assets/phone.png"};
+const ASSETS = {"bgPadrao": "assets/bg.jpg", "bgEstrada": "assets/bg-estrada.webp", "bgDocas": "assets/bg-docas.webp", "bgMascote": "assets/bg-mascote.webp", "truck": "assets/truck.svg", "tag": "assets/tag.svg", "origin": "assets/origin.svg", "dest": "assets/dest.svg", "agenda": "assets/agenda.svg", "phone": "assets/phone.png"};
 
 const canvas = document.getElementById('cv');
 const ctx = canvas.getContext('2d');
@@ -311,6 +311,10 @@ function loadImages(){
     };
     img.src = ASSETS[k];
     images[k] = img;
+    // "bg" é a imagem ATIVA (o que o canvas desenha); começa apontando
+    // para o preset padrão, mas é uma chave própria — trocar o fundo
+    // nunca deve sobrescrever o preset "bgPadrao" em si.
+    if(k === 'bgPadrao') images.bg = img;
   });
 }
 
