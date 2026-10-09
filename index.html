@@ -206,9 +206,13 @@
     <h1>Gerador de Anúncio de Carga</h1>
     <p class="subtitle">Preencha os campos e baixe a imagem pronta para WhatsApp/Instagram.</p>
 
-    <label for="bgUpload">Imagem de fundo <span class="opt">(opcional)</span></label>
-    <input type="file" id="bgUpload" accept="image/*">
-    <button type="button" class="btn secondary" id="bgResetBtn" style="margin-top:8px;">Restaurar imagem padrão</button>
+    <label for="bgSelect">Imagem de fundo</label>
+    <select id="bgSelect">
+      <option value="bg">Padrão</option>
+      <option value="bgEstrada">Estrada</option>
+      <option value="bgDocas">Docas (pôr do sol)</option>
+      <option value="bgMascote">Mascote</option>
+    </select>
 
     <label>Veículo <span class="opt">(selecione um ou mais)</span></label>
     <div class="checkbox-group" id="veiculoGroup">
@@ -244,7 +248,7 @@
     <label for="agenda">Agenda</label>
     <input type="date" id="agenda" value="2026-09-17">
     <label class="checkbox-item" style="margin-top:8px;">
-      <input type="checkbox" id="embarqueImediato"> Embarque imediato
+      <input type="checkbox" id="entregaImediata"> Entrega imediata
     </label>
 
     <div class="row2">
@@ -276,7 +280,7 @@
 </div>
 
 <script>
-const ASSETS = {"bg": "assets/bg.jpg", "truck": "assets/truck.svg", "tag": "assets/tag.svg", "origin": "assets/origin.svg", "dest": "assets/dest.svg", "agenda": "assets/agenda.svg", "phone": "assets/phone.png"};
+const ASSETS = {"bg": "assets/bg.jpg", "bgEstrada": "assets/bg-estrada.webp", "bgDocas": "assets/bg-docas.webp", "bgMascote": "assets/bg-mascote.webp", "truck": "assets/truck.svg", "tag": "assets/tag.svg", "origin": "assets/origin.svg", "dest": "assets/dest.svg", "agenda": "assets/agenda.svg", "phone": "assets/phone.png"};
 
 const canvas = document.getElementById('cv');
 const ctx = canvas.getContext('2d');
@@ -538,8 +542,8 @@ function render(){
     tagPedagio: document.getElementById('tagPedagio').value || ' ',
     origem: document.getElementById('origem').value || ' ',
     destino: document.getElementById('destino').value || ' ',
-    agenda: document.getElementById('embarqueImediato').checked
-      ? 'EMBARQUE IMEDIATO'
+    agenda: document.getElementById('entregaImediata').checked
+      ? 'ENTREGA IMEDIATA'
       : (formatAgendaDisplay(document.getElementById('agenda').value) || ' '),
     responsavel: document.getElementById('responsavel').value || ' ',
     telefone: document.getElementById('telefone').value || ' '
@@ -599,31 +603,16 @@ function render(){
 ['origem','destino','agenda','telefone'].forEach(id=>{
   document.getElementById(id).addEventListener('input', maybeRender);
 });
-document.getElementById('embarqueImediato').addEventListener('change', ()=>{
-  document.getElementById('agenda').disabled = document.getElementById('embarqueImediato').checked;
+document.getElementById('entregaImediata').addEventListener('change', ()=>{
+  document.getElementById('agenda').disabled = document.getElementById('entregaImediata').checked;
   maybeRender();
 });
 
-// Troca da imagem de fundo: carrega o arquivo escolhido como uma nova
-// imagem independente (não mexe no contador de carregamento inicial)
-// e re-renderiza assim que ela estiver pronta.
-document.getElementById('bgUpload').addEventListener('change', (e)=>{
-  const file = e.target.files && e.target.files[0];
-  if(!file) return;
-  const reader = new FileReader();
-  reader.onload = (ev)=>{
-    const img = new Image();
-    img.onload = ()=>{ images.bg = img; maybeRender(); };
-    img.src = ev.target.result;
-  };
-  reader.readAsDataURL(file);
-});
-
-document.getElementById('bgResetBtn').addEventListener('click', ()=>{
-  document.getElementById('bgUpload').value = '';
-  const img = new Image();
-  img.onload = ()=>{ images.bg = img; maybeRender(); };
-  img.src = ASSETS.bg;
+// Troca da imagem de fundo entre as opções pré-carregadas (images[k] já
+// está pronto desde o carregamento inicial da página).
+document.getElementById('bgSelect').addEventListener('change', (e)=>{
+  images.bg = images[e.target.value];
+  maybeRender();
 });
 document.querySelectorAll('#veiculoGroup input[type=checkbox]').forEach(cb=>{
   cb.addEventListener('change', maybeRender);
